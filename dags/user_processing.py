@@ -1,11 +1,10 @@
-from email import header
 import json
-from operator import index
 from airflow.models import DAG
 from airflow.providers.sqlite.operators.sqlite import SqliteOperator
 from airflow.providers.http.sensors.http import HttpSensor
 from airflow.providers.http.operators.http import SimpleHttpOperator
-from airflow.operators.python import PythonOperator, BashOperator
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from datetime import datetime
 from pandas import json_normalize
 
@@ -53,6 +52,7 @@ with DAG('user_processing', schedule_interval='@daily',
             '''
     )
     # DEVO CREARE LA CONNECTION AL DB DA AIRFLOW UI
+    
 
     # 2. CHECK API AVAILABLE
     is_api_available = HttpSensor(
@@ -79,4 +79,10 @@ with DAG('user_processing', schedule_interval='@daily',
     )
 
     # 5. STORING USER
-    storing_user = 
+    storing_user = BashOperator(
+        task_id='storing_user',
+        bash_command='echo -e ".separator ","\n.import /tmp/processed_user.csv users" | sqlite3 /home/airflow/airflow/airflow.db' # import user inside the sqlite db
+    )
+    # ".separator ",""  --> I specified the separator of my values in this file (a comma)
+    # .import /tmp/processed_user.csv users --> then execute that import in order to import the csv file inside the table users
+    # sqlite3 /home/airflow/airflow/airflow.db  --> this command will be executed inside the sqlite3 interpretor for the database airflow db
