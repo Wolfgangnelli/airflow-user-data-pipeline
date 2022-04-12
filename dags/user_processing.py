@@ -41,7 +41,7 @@ with DAG('user_processing', schedule_interval='@daily',
         task_id='creating_user_table',
         sqlite_conn_id='db_sqlite',
         sql='''
-            CREATE TABLE users (
+            CREATE TABLE IF NOT EXISTS users (
                 firstname TEXT NOT NULL,
                 lastname TEXT NOT NULL,
                 country TEXT NOT NULL,
@@ -86,3 +86,6 @@ with DAG('user_processing', schedule_interval='@daily',
     # ".separator ",""  --> I specified the separator of my values in this file (a comma)
     # .import /tmp/processed_user.csv users --> then execute that import in order to import the csv file inside the table users
     # sqlite3 /home/airflow/airflow/airflow.db  --> this command will be executed inside the sqlite3 interpretor for the database airflow db
+
+    # DEPENDENCIES
+    creating_table >> is_api_available >> extractiong_user >> processing_user >> storing_user
