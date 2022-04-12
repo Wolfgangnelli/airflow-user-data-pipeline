@@ -9,7 +9,7 @@ from datetime import datetime
 from pandas import json_normalize
 
 default_args = {
-    'start_date': datetime(2022, 4, 8)
+    'start_date': datetime(2020, 1, 1)
 }
 
 def _processing_user(ti): # ti (task instance)
@@ -51,7 +51,7 @@ with DAG('user_processing', schedule_interval='@daily',
             );
             '''
     )
-    # DEVO CREARE LA CONNECTION AL DB DA AIRFLOW UI
+    # DEVO CREARE LA CONNECTION AL DB SU AIRFLOW UI
     
 
     # 2. CHECK API AVAILABLE
