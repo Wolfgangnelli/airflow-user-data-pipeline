@@ -1,0 +1,28 @@
+[2022-04-15 13:52:43,641] {taskinstance.py:1043} INFO - Dependencies all met for <TaskInstance: parallel_dag.task_4 scheduled__2020-01-17T00:00:00+00:00 [queued]>
+[2022-04-15 13:52:44,484] {taskinstance.py:1043} INFO - Dependencies all met for <TaskInstance: parallel_dag.task_4 scheduled__2020-01-17T00:00:00+00:00 [queued]>
+[2022-04-15 13:52:44,485] {taskinstance.py:1249} INFO - 
+--------------------------------------------------------------------------------
+[2022-04-15 13:52:44,518] {taskinstance.py:1250} INFO - Starting attempt 1 of 1
+[2022-04-15 13:52:44,519] {taskinstance.py:1251} INFO - 
+--------------------------------------------------------------------------------
+[2022-04-15 13:52:45,594] {taskinstance.py:1270} INFO - Executing <Task(BashOperator): task_4> on 2020-01-17 00:00:00+00:00
+[2022-04-15 13:52:45,836] {standard_task_runner.py:52} INFO - Started process 117184 to run task
+[2022-04-15 13:52:45,896] {standard_task_runner.py:79} INFO - Running: ['airflow', 'tasks', 'run', 'parallel_dag', 'task_4', 'scheduled__2020-01-17T00:00:00+00:00', '--job-id', '109', '--raw', '--subdir', 'DAGS_FOLDER/parallel_dag.py', '--cfg-path', '/tmp/tmpac8xotto', '--error-file', '/tmp/tmpk04qe_fi']
+[2022-04-15 13:52:46,494] {standard_task_runner.py:80} INFO - Job 109: Subtask task_4
+[2022-04-15 13:52:50,479] {logging_mixin.py:109} INFO - Running <TaskInstance: parallel_dag.task_4 scheduled__2020-01-17T00:00:00+00:00 [running]> on host 10.0.2.15
+[2022-04-15 13:52:55,444] {taskinstance.py:1446} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=solfa
+AIRFLOW_CTX_DAG_ID=parallel_dag
+AIRFLOW_CTX_TASK_ID=task_4
+AIRFLOW_CTX_EXECUTION_DATE=2020-01-17T00:00:00+00:00
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2020-01-17T00:00:00+00:00
+[2022-04-15 13:52:55,501] {subprocess.py:62} INFO - Tmp dir root location: 
+ /tmp
+[2022-04-15 13:52:55,598] {subprocess.py:74} INFO - Running command: ['bash', '-c', 'sleep 3']
+[2022-04-15 13:52:55,974] {subprocess.py:85} INFO - Output:
+[2022-04-15 13:52:59,523] {subprocess.py:93} INFO - Command exited with return code 0
+[2022-04-15 13:53:01,501] {taskinstance.py:1278} INFO - Marking task as SUCCESS. dag_id=parallel_dag, task_id=task_4, execution_date=20200117T000000, start_date=20220415T135243, end_date=20220415T135301
+[2022-04-15 13:53:02,539] {local_task_job.py:154} INFO - Task exited with return code 0
+[2022-04-15 13:53:03,975] {local_task_job.py:264} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2022-04-15 13:53:05,181] {dagrun.py:545} INFO - Marking run <DagRun parallel_dag @ 2020-01-17 00:00:00+00:00: scheduled__2020-01-17T00:00:00+00:00, externally triggered: False> successful
+[2022-04-15 13:53:05,378] {dagrun.py:590} INFO - DagRun Finished: dag_id=parallel_dag, execution_date=2020-01-17 00:00:00+00:00, run_id=scheduled__2020-01-17T00:00:00+00:00, run_start_date=2022-04-15 13:50:35.421739+00:00, run_end_date=2022-04-15 13:53:05.378357+00:00, run_duration=149.956618, state=success, external_trigger=False, run_type=scheduled, data_interval_start=2020-01-17 00:00:00+00:00, data_interval_end=2020-01-18 00:00:00+00:00, dag_hash=2e1728272660f48fa2de34c79560b2dd
