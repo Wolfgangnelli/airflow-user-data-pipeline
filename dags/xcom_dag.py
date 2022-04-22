@@ -57,4 +57,3 @@ with DAG(
     )
 
     downloading_data >> processing_tasks >> choose_model
-
