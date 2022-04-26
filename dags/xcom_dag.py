@@ -2,7 +2,6 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.utils.task_group import TaskGroup
-
 from random import uniform
 from datetime import datetime
 
@@ -12,13 +11,16 @@ default_args = {
 }
 
 
-def _training_model():
+def _training_model(ti):
     accuracy = uniform(0.1, 10.0)
     print(f'model\'s accuracy: {accuracy}')
+    ti.xcom_push(key='model_accuracy', value=accuracy)
+    # return accuracy  # airflow will assign the key return_value on XCom return value in xcom list on UI
 
-def _choose_best_model():
+def _choose_best_model(ti):
     print('choose best model')
-
+    accuracies = ti.xcom_pull(key='model_accuracy', task_ids=['processing_tasks.training_model_a', 'processing_tasks.training_model_b', 'processing_tasks.training_model_c'])
+    print(accuracies)
 
 with DAG(
     'xcom_dag',
@@ -28,8 +30,9 @@ with DAG(
 ) as dag:
 
     downloading_data = BashOperator(
-        'downloading_data',
-        bash_command='sleep 3'
+        task_id='downloading_data',
+        bash_command='sleep 3',
+        do_xcom_push=False
     )
 
     with TaskGroup(
@@ -37,17 +40,17 @@ with DAG(
     ) as processing_tasks:
 
         training_model_a = PythonOperator(
-            'training_model_a',
+            task_id='training_model_a',
             python_callable=_training_model
         )
 
         training_model_b = PythonOperator(
-            'training_model_b',
+            task_id='training_model_b',
             python_callable=_training_model
         )
 
         training_model_c = PythonOperator(
-            'training_model_c',
+            task_id='training_model_c',
             python_callable=_training_model
         )
 
