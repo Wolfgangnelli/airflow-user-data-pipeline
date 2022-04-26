@@ -1,7 +1,8 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.utils.task_group import TaskGroup
+from airflow.operators.dummy import DummyOperator
 from random import uniform
 from datetime import datetime
 
@@ -20,7 +21,11 @@ def _training_model(ti):
 def _choose_best_model(ti):
     print('choose best model')
     accuracies = ti.xcom_pull(key='model_accuracy', task_ids=['processing_tasks.training_model_a', 'processing_tasks.training_model_b', 'processing_tasks.training_model_c'])
-    print(accuracies)
+    for accuracy in accuracies:
+        if accuracy > 10:
+            return 'accurate'
+    return 'inaccurate'
+    
 
 with DAG(
     'xcom_dag',
@@ -54,9 +59,23 @@ with DAG(
             python_callable=_training_model
         )
 
-    choose_model = PythonOperator(
-        task_id='task_4',
+    choose_model = BranchPythonOperator(
+        task_id='choose_best_model',
         python_callable=_choose_best_model
     )
 
+
+    accurate = DummyOperator(
+        task_id='accurate'
+    )
+
+    inaccurate = DummyOperator(
+        task_id='inaccurate'
+    )
+
+    storing = DummyOperator(
+        task_id='storing'
+    )
+
     downloading_data >> processing_tasks >> choose_model
+    choose_model >> [accurate, inaccurate] >> storing
