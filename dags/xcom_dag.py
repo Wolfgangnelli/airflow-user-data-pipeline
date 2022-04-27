@@ -74,7 +74,8 @@ with DAG(
     )
 
     storing = DummyOperator(
-        task_id='storing'
+        task_id='storing',
+        trigger_rule='none_failed_or_skipped'
     )
 
     downloading_data >> processing_tasks >> choose_model
